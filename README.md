@@ -1,52 +1,41 @@
-# Spine 
+Spine
 
-Letterboxd'un kitap versiyonu. Okuduğun, okumakta olduğun ve okumak istediğin kitapları takip et; puanla, yorumla, günlüğünü tut. Tamamen istemci taraflı (HTML/CSS/JS), sunucu veya build adımı gerektirmez.
+Okuduğum kitapları takip etmek için yaptığım küçük bir web uygulaması. Letterboxd'u kullanırken kitaplar için de böyle bir şey olsun istedim, Spine de bu fikirden çıktı.
 
+Kitap arayıp rafa ekleyebiliyor, okuduklarını puanlayıp not düşebiliyorsun. Bitirdiğin kitaplar tarih sırasıyla bir günlükte listeleniyor.
 
-## Özellikler
+Özellikler
+Open Library üzerinden kitap arama (API anahtarı gerekmiyor)
+Üç raf: Okumak istiyorum, Okuyorum, Okudum
+5 yıldız üzerinden puanlama ve kitaplara yorum ekleme
+Okunan kitapların günlüğü
+Basit istatistikler: puan dağılımı, en çok okunan yazarlar, toplam sayfa sayısı
+Kütüphaneyi JSON dosyası olarak dışa aktarma ve geri yükleme
+Koyu tema, mobilde de düzgün görünüyor
+Kullanılan teknolojiler
+HTML, CSS, JavaScript (framework kullanmadım)
+Open Library Search API ve Covers API
+Veri saklama için tarayıcının localStorage'ı
 
--  **Kitap ara** — [Open Library](https://openlibrary.org/developers/api) kataloğunda arama, API anahtarı gerekmez
--  **Raflar** — Okumak istiyorum / Okuyorum / Okudum
--  **Puanlama** — 5 yıldızlı puanlama sistemi
--  **Yorumlar** — her kitaba kendi notlarını ekle
--  **Günlük akışı** — bitirdiğin kitapların kronolojik günlüğü
--  **İstatistikler** — puan dağılımı, en çok okunan yazarlar, toplam sayfa
--  **Veri dışa/içe aktarma** — kütüphaneni JSON olarak yedekle
--  Mor tonlarında, koyu temalı, mobil uyumlu tasarım
--  Veriler yalnızca kendi tarayıcında (`localStorage`) saklanır — hesap, backend yok
+Backend ya da veritabanı yok, her şey tarayıcıda çalışıyor. Bu yüzden veriler sadece kullandığın tarayıcıda duruyor. Başka bir cihaza taşımak için dışa aktarma özelliğini ekledim.
 
-## Dosya yapısı
-
-```
-spine/
-├── index.html        # sayfa iskeleti
-├── css/
-│   └── style.css     # tüm tasarım
-├── js/
-│   └── app.js         # uygulama mantığı (state, arama, modal, render)
+Dosyalar
+spine-book-tracker/
+├── index.html   # sayfa yapısı
+├── style.css    # tasarım
+├── app.js       # uygulamanın mantığı (arama, raflar, modal, istatistikler)
 └── README.md
-```
+Çalıştırma
 
-## Yerelde çalıştırma
+Kurulum gerektirmiyor. index.html dosyasını tarayıcıda açman yeterli. Arama kısmının sorunsuz çalışması için basit bir yerel sunucuyla açmak daha iyi:
 
-Build adımı yok. Sadece `index.html` dosyasını bir tarayıcıda aç, ya da basit bir sunucu ile servis et (fetch/CORS için sunucu üzerinden açman önerilir):
-
-```bash
-# Python varsa
+bash
 python3 -m http.server 8080
 
-# veya Node varsa
-npx serve .
-```
+Sonra tarayıcıda http://localhost:8080 adresine git.
 
-Sonra tarayıcıda `http://localhost:8080` adresini aç.
-
-
-## Nasil calisir?
-
-- Arama, Open Library'nin `search.json` uç noktasını kullanır ve sonuç başına kapak, yazar, ilk basım yılı bilgisini gösterir.
-- Bir kitabı bir rafa eklediğinde (İstiyorum / Okuyorum / Okudum) kayıt `localStorage`'a yazılır.
-- Bir kitabı "Okudum" olarak işaretleyip yıldız + yorum eklediğinde otomatik olarak günlük akışında belirir.
-- "Verini dışa aktar" butonu tüm kütüphaneni `.json` dosyası olarak indirir; "Veri içe aktar" ile bu dosyayı geri yükleyebilir veya cihazlar arasında taşıyabilirsin.
-
-
+Nasıl çalışıyor?
+Arama kutusuna yazılan kelime Open Library'nin search.json adresine gönderiliyor. Gelen sonuçlarda kapak, yazar ve ilk basım yılı gösteriliyor.
+Bir kitap rafa eklendiğinde bilgileri localStorage'a kaydediliyor.
+"Okudum" olarak işaretlenen kitaplar puan ve yorumla birlikte günlükte görünüyor.
+Dışa aktar butonu tüm kütüphaneyi .json dosyası olarak indiriyor, içe aktar ile bu dosya geri yüklenebiliyor.
